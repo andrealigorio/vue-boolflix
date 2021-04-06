@@ -24,6 +24,16 @@ header {
 }
 .container {
     width: 100%;
-    height: 800px;
+    min-height: calc(100vh - 70px);
     background-color: #212529;
+}
+.language {
+    height: 20px;
+    margin: 5px 0;
+}
+.language img {
+    height: 100%;
+}
+.vote {
+    display: flex;
 }
