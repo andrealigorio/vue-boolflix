@@ -7,7 +7,8 @@ var app = new Vue({
         searchText: "",
         movies: [],
         tv: [],
-        search: false
+        search: false,
+        posterSize: "w342/"
     },
     methods: {
         searchMovie() {

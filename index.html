@@ -27,33 +27,43 @@
         </header>
         <div class="container">
             <div class="movie" v-for="movie in movies">
-                <div class="title">
-                    {{movie.title}}
+                <div class="poster">
+                    <img :src="'http://image.tmdb.org/t/p/' + posterSize + movie.poster_path" :alt="movie.title">
                 </div>
-                <div class="original_title" v-if="movie.title != movie.original_title">
-                    {{movie.original_title}}
-                </div>
-                <div class="language">
-                    <img :src="printFlag(movie)" :alt="movie.original_language">
-                </div>
-                <div class="vote">
-                    <i v-for="star in printStars(movie.vote_average)" class="fas fa-star"></i>
-                    <i v-for="star in (5 - printStars(movie.vote_average))"class="far fa-star"></i>
+                <div class="text">
+                    <div class="title">
+                        {{movie.title}}
+                    </div>
+                    <div class="original_title" v-if="movie.title != movie.original_title">
+                        {{movie.original_title}}
+                    </div>
+                    <div class="language">
+                        <img :src="printFlag(movie)" :alt="movie.original_language">
+                    </div>
+                    <div class="vote">
+                        <i v-for="star in printStars(movie.vote_average)" class="fas fa-star"></i>
+                        <i v-for="star in (5 - printStars(movie.vote_average))"class="far fa-star"></i>
+                    </div>
                 </div>
             </div>
             <div class="tv" v-for="serie in tv">
-                <div class="title">
-                    {{serie.name}}
+                <div class="poster">
+                    <img :src="'http://image.tmdb.org/t/p/' + posterSize + tv.poster_path" :alt="tv.title">
                 </div>
-                <div class="original_title" v-if="serie.name != serie.original_name">
-                    {{serie.original_name}}
-                </div>
-                <div class="language">
-                    <img :src="printFlag(serie)" :alt="serie.original_language">
-                </div>
-                <div class="vote">
-                    <i v-for="star in printStars(serie.vote_average)" class="fas fa-star"></i>
-                    <i v-for="star in (5 - printStars(serie.vote_average))" class="far fa-star"></i>
+                <div class="text">
+                    <div class="title">
+                        {{serie.name}}
+                    </div>
+                    <div class="original_title" v-if="serie.name != serie.original_name">
+                        {{serie.original_name}}
+                    </div>
+                    <div class="language">
+                        <img :src="printFlag(serie)" :alt="serie.original_language">
+                    </div>
+                    <div class="vote">
+                        <i v-for="star in printStars(serie.vote_average)" class="fas fa-star"></i>
+                        <i v-for="star in (5 - printStars(serie.vote_average))" class="far fa-star"></i>
+                    </div>
                 </div>
             </div>
             <div class="nothing_found" v-if="(movies.length == 0 && search) || (tv.length == 0 && search)">
