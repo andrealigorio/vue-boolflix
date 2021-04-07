@@ -27,6 +27,14 @@ header {
     width: 100%;
     min-height: calc(100vh - 70px);
     background-color: #212529;
+    display: flex;
+    flex-wrap: wrap;
+}
+.poster {
+    width: 342px;
+}
+.poster img {
+    width: 100%;
 }
 .language {
     height: 20px;

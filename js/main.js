@@ -5,45 +5,65 @@ var app = new Vue({
         apiKey: "1e6535bad1b40a48d42727d1fd3d7131",
         language: "it-IT",
         searchText: "",
-        movies: [],
-        tv: [],
+        allTvMovies: [],
         search: false,
-        posterSize: "w342/"
+        posterSize: "w342",
+        nullPoster: "img_not_found.jpg"
     },
     methods: {
         searchMovie() {
+            this.resetSearch();
             if(this.searchText != "") {
                 axios
-                    .get("https://api.themoviedb.org/3/search/movie?api_key=" + this.apiKey + "&language=" + this.language + "&query=" + this.searchText)
+                    .get("https://api.themoviedb.org/3/search/multi",
+                    { params: {
+                            api_key: this.apiKey,
+                            language: this.language,
+                            query: this.searchText
+                            }
+                    })
                     .then(response => {
-                        this.movies = response.data.results;
+                        response.data.results.forEach(element => {
+                            if (element.media_type == "movie" || element.media_type == "tv") {
+                                this.allTvMovies.push(element);
+                            }
+                        });
                         this.search = true;
                 });
-                axios
-                    .get("https://api.themoviedb.org/3/search/tv?api_key=" + this.apiKey + "&language=" + this.language + "&query=" + this.searchText)
-                    .then(response => {
-                        this.tv = response.data.results;
-                        this.search = true;
-                    });
             } else {
-                this.movies = [];
-                this.tv = [];
+                this.allTvMovies = [];
             }
-            this.search = false;
         },
         printFlag(array) {
-            let languageLink = "https://lipis.github.io/flag-icon-css/flags/4x3/"
-            if(array.original_language != "en") {  //Perchè lingua EN equivale alla bandiera della GB
-                languageLink = languageLink + array.original_language + ".svg";
-            } else {
-                languageLink = languageLink + "gb.svg";
-            }
-            return languageLink;
+            return `https://unpkg.com/language-icons/icons/${array.original_language}.svg`;
         },
         printStars(number) {
-            let vote = Math.ceil(number/2);
-            var fullStars = vote;
+            let fullStars = Math.ceil(number/2);
             return fullStars;
+        },
+        printPoster(array) {
+            if(array.poster_path != null) {
+                return `http://image.tmdb.org/t/p/${this.posterSize}/${array.poster_path}`;
+            } else {
+                return `img/${this.nullPoster}`
+            }
+        },
+        isMovie(array) {
+            if(array.media_type == "movie") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        sameTitle(array) {
+            if((array.title == array.original_title) && (array.name == array.original_name)) {
+                return true;
+            }
+            return false;
+        },
+        resetSearch() {
+            this.allTvMovies = [];
+            this.search = false;
         }
     }
 });
