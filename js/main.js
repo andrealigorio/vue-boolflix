@@ -77,6 +77,19 @@ var app = new Vue({
         resetSearch() {
             this.allTvMovies = [];
             this.search = false;
+        },
+        ifOverview(array) {
+            if(array.overview != "") {
+                return true;
+            }
+            return false;
+        },
+        tipology(array) {
+            if(this.isMovie(array)) {
+                return "Film";
+            } else {
+                return "Serie";
+            }
         }
     }
 });
