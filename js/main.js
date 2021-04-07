@@ -35,11 +35,24 @@ var app = new Vue({
             }
         },
         printFlag(array) {
-            return `https://unpkg.com/language-icons/icons/${array.original_language}.svg`;
+            let languageLink = "https://lipis.github.io/flag-icon-css/flags/4x3/"
+            if(array.original_language == "en") {
+                languageLink += "gb.svg";
+            } else if (array.original_language == "ja") {
+                languageLink += "jp.svg";
+            } else if (array.original_language == "ko") {
+                languageLink += "kr.svg";
+            } else if (array.original_language == "zh") {
+                languageLink += "cn.svg";
+            } else if (array.original_language == "ta") {
+                languageLink += "in.svg";
+            } else {
+                languageLink += array.original_language + ".svg";
+            }
+            return languageLink;
         },
         printStars(number) {
-            let fullStars = Math.ceil(number/2);
-            return fullStars;
+            return Math.ceil(number/2);
         },
         printPoster(array) {
             if(array.poster_path != null) {
