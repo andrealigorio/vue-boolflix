@@ -90,6 +90,9 @@ var app = new Vue({
             } else {
                 return "Serie";
             }
+        },
+        refreshPage() {
+            location.reload();
         }
     }
 });
