@@ -9,7 +9,9 @@ var app = new Vue({
         search: false,
         posterSize: "w342",
         nullPoster: "img_not_found.jpg",
-        genres: []
+        genresObj: [],
+        genres: [],
+        genreSelected: "All"
     },
     methods: {
         searchMovie() {
@@ -41,6 +43,7 @@ var app = new Vue({
                                         }
                                     }
                                     element.cast = cast;    //aggiungo propriteà "cast" all'oggetto
+                                    this.foundGenre(element);
                                     this.allTvMovies.push(element);
                                 });
                             } if (element.media_type == "tv") {
@@ -60,6 +63,7 @@ var app = new Vue({
                                         }
                                     }
                                     element.cast = cast;
+                                    this.foundGenre(element);
                                     this.allTvMovies.push(element);
                                 });
                             }
@@ -140,15 +144,23 @@ var app = new Vue({
         foundGenre(item) {
             let genreArray = [];
             for(let i = 0; i < item.genre_ids.length; i++) {
-                this.genres.forEach(element => {
+                this.genresObj.forEach(element => {
                     if(element.id == item.genre_ids[i]) {
                         if(!genreArray.includes(element.name)){
                             genreArray.push(element.name);
+                            item.genre = genreArray;
                         }
                     }
                 });
             }
-            return genreArray.join(", ");
+        },
+        genreFilter(item) {
+            if(item.genre != undefined) {
+                if (this.genreSelected == "All" || item.genre.includes(this.genreSelected)) {
+                        return true;
+                }
+                return false;
+            }
         }
     },
     mounted() {
@@ -160,7 +172,7 @@ var app = new Vue({
                 }
             })
             .then(response => {
-                this.genres = this.genres.concat(response.data.genres);
+                this.genresObj = this.genresObj.concat(response.data.genres);
             });
         axios
             .get("https://api.themoviedb.org/3/genre/tv/list",
@@ -171,7 +183,12 @@ var app = new Vue({
                 }
             })
             .then(response => {
-                this.genres = this.genres.concat(response.data.genres);
+                this.genresObj = this.genresObj.concat(response.data.genres);
+                this.genresObj.forEach(element => {
+                    if(!this.genres.includes(element.name)) {
+                        this.genres.push(element.name);
+                    }
+                });
             });
     }
 });

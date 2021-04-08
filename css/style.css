@@ -30,6 +30,13 @@ header {
 .logo img {
     height: 100%;
 }
+.genre_filter label {
+    color: #db202c;
+}
+.genre_filter select {
+    padding: 5px;
+    cursor: pointer;
+}
 .search_bar {
     display: flex;
     align-items: center;

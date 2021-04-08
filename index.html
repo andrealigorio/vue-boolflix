@@ -20,13 +20,20 @@
             <div class="logo" @click="refreshPage">
                 <img src="img/boolflix.png" alt="Logo Boolflix">
             </div>
+            <div class="genre_filter">
+                <label for="genre">Filtra per genere</label>
+                <select name="genre" id="genre" v-model="genreSelected">
+                    <option value="All">All</option>
+                    <option :value="genre" v-for="genre in genres">{{genre}}</option>
+                </select>
+            </div>
             <div class="search_bar">
                 <button class="search" @click="searchMovie"><i class="fas fa-search"></i></button>
                 <input type="text" v-model="searchText" @keyup.enter="searchMovie" placeholder="Cerca un film o una serie tv">
             </div>
         </header>
         <div class="container">
-            <div class="movie" v-for="movie in allTvMovies">
+            <div class="movie" v-for="movie in allTvMovies" v-if="genreFilter(movie)">
                 <div class="poster">
                     <img :src="printPoster(movie)" :alt="isMovie(movie) ? movie.title : movie.name">
                 </div>
@@ -41,7 +48,7 @@
                         <span>Tipologia:</span>{{tipology(movie)}}
                     </div>
                     <div class="genre" v-if="movie.genre_ids.length > 0">
-                        <span>Genere:</span>{{foundGenre(movie)}}
+                        <span>Genere:</span>{{movie.genre.join(", ")}}
                     </div>
                     <div class="cast" v-if="movie.cast.length > 0">
                         <span>Cast:</span>{{printCast(movie.cast)}}
