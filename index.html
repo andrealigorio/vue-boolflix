@@ -22,7 +22,7 @@
             </div>
             <div class="search_bar">
                 <button class="search" @click="searchMovie"><i class="fas fa-search"></i></button>
-                <input type="text" v-model="searchText" @keyup.enter="searchMovie">
+                <input type="text" v-model="searchText" @keyup.enter="searchMovie" placeholder="Cerca un film o una serie tv">
             </div>
         </header>
         <div class="container">
@@ -40,8 +40,11 @@
                     <div class="tipology">
                         <span>Tipologia:</span>{{tipology(movie)}}
                     </div>
+                    <div class="cast" v-if="movie.cast.length > 0">
+                        <span>Cast:</span>{{printCast(movie.cast)}}
+                    </div>
                     <div class="language">
-                        <span>Lingua originale:</span><img :src="printFlag(movie)" :alt="movie.original_language">
+                        <span>Lingua originale:</span><img :src="printFlag(movie)" :alt="movie.original_language" @error="noFlag">
                     </div>
                     <div class="vote">
                         <span>Valutazione:</span>

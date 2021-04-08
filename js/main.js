@@ -24,8 +24,45 @@ var app = new Vue({
                     })
                     .then(response => {
                         response.data.results.forEach(element => {
-                            if (element.media_type == "movie" || element.media_type == "tv") {
-                                this.allTvMovies.push(element);
+                            if (element.media_type == "movie") {
+                                let item = element;
+                                axios
+                                .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`,
+                                { params: {
+                                    api_key: this.apiKey,
+                                    language: this.language
+                                    }
+                                })
+                                .then(response => {
+                                    let cast = [];
+                                    for (let i = 0; i < response.data.cast.length; i++) {
+                                        if (response.data.cast[i].known_for_department == "Acting") { //In modo da avere in risposta solo gli attori
+                                            cast.push(response.data.cast[i].name);
+                                        }
+                                    }
+                                    item.cast = cast;
+                                    this.allTvMovies.push(item);
+                                })
+                            } if (element.media_type == "tv") {
+                                let item = element;
+                                axios
+                                .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`,
+                                    {
+                                        params: {
+                                            api_key: this.apiKey,
+                                            language: this.language
+                                        }
+                                    })
+                                .then(response => {
+                                    let cast = [];
+                                    for (let i = 0; i < response.data.cast.length; i++) {
+                                        if (response.data.cast[i].known_for_department == "Acting") {
+                                            cast.push(response.data.cast[i].name);
+                                        }
+                                    }
+                                    item.cast = cast;
+                                    this.allTvMovies.push(item);
+                                })
                             }
                         });
                         this.search = true;
@@ -34,42 +71,42 @@ var app = new Vue({
                 this.allTvMovies = [];
             }
         },
-        printFlag(array) {
+        printFlag(item) {
             let languageLink = "https://lipis.github.io/flag-icon-css/flags/4x3/"
-            if(array.original_language == "en") {
+            if(item.original_language == "en") {
                 languageLink += "gb.svg";
-            } else if (array.original_language == "ja") {
+            } else if (item.original_language == "ja") {
                 languageLink += "jp.svg";
-            } else if (array.original_language == "ko") {
+            } else if (item.original_language == "ko") {
                 languageLink += "kr.svg";
-            } else if (array.original_language == "zh") {
+            } else if (item.original_language == "zh") {
                 languageLink += "cn.svg";
-            } else if (array.original_language == "ta") {
+            } else if (item.original_language == "ta") {
                 languageLink += "in.svg";
             } else {
-                languageLink += array.original_language + ".svg";
+                languageLink += item.original_language + ".svg";
             }
             return languageLink;
         },
-        printStars(number) {
-            return Math.ceil(number/2);
+        printStars(vote) {
+            return Math.ceil(vote/2);
         },
-        printPoster(array) {
-            if(array.poster_path != null) {
-                return `http://image.tmdb.org/t/p/${this.posterSize}/${array.poster_path}`;
+        printPoster(item) {
+            if(item.poster_path != null) {
+                return `http://image.tmdb.org/t/p/${this.posterSize}/${item.poster_path}`;
             } else {
                 return `img/${this.nullPoster}`
             }
         },
-        isMovie(array) {
-            if(array.media_type == "movie") {
+        isMovie(item) {
+            if(item.media_type == "movie") {
                 return true;
             } else {
                 return false;
             }
         },
-        sameTitle(array) {
-            if((array.title == array.original_title) && (array.name == array.original_name)) {
+        sameTitle(item) {
+            if((item.title == item.original_title) && (item.name == item.original_name)) {
                 return true;
             }
             return false;
@@ -78,14 +115,14 @@ var app = new Vue({
             this.allTvMovies = [];
             this.search = false;
         },
-        ifOverview(array) {
-            if(array.overview != "") {
+        ifOverview(item) {
+            if(item.overview != "") {
                 return true;
             }
             return false;
         },
-        tipology(array) {
-            if(this.isMovie(array)) {
+        tipology(item) {
+            if(this.isMovie(item)) {
                 return "Film";
             } else {
                 return "Serie";
@@ -93,6 +130,19 @@ var app = new Vue({
         },
         refreshPage() {
             location.reload();
+        },
+        noFlag(event) {
+            event.target.src = `img/noflag.jpg`
+        },
+        printCast(array) {
+            let firstFive = [];
+            for(let i = 0; i < array.length; i++) {
+                firstFive.push(array[i])
+                if(i == 4) {
+                    return firstFive.join(", ");
+                }
+            }
+            return firstFive.join(", ");
         }
     }
 });

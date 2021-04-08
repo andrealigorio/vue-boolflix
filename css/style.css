@@ -50,6 +50,9 @@ header {
 .search_bar input, .search i {
     font-size: 120%;
 }
+.search_bar input {
+    width: 250px;
+}
 .container {
     width: 100%;
     display: flex;
