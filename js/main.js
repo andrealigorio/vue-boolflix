@@ -24,8 +24,7 @@ var app = new Vue({
                     })
                     .then(response => {
                         response.data.results.forEach(element => {
-                            if (element.media_type == "movie") {
-                                let item = element;
+                            if (element.media_type == "movie") {                    
                                 axios
                                 .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`,
                                 { params: {
@@ -40,11 +39,10 @@ var app = new Vue({
                                             cast.push(response.data.cast[i].name);
                                         }
                                     }
-                                    item.cast = cast;
-                                    this.allTvMovies.push(item);
+                                    element.cast = cast;    //aggiungo propriteà "cast" all'oggetto
+                                    this.allTvMovies.push(element);
                                 })
                             } if (element.media_type == "tv") {
-                                let item = element;
                                 axios
                                 .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`,
                                     {
@@ -60,8 +58,8 @@ var app = new Vue({
                                             cast.push(response.data.cast[i].name);
                                         }
                                     }
-                                    item.cast = cast;
-                                    this.allTvMovies.push(item);
+                                    element.cast = cast;
+                                    this.allTvMovies.push(element);
                                 })
                             }
                         });
