@@ -8,7 +8,8 @@ var app = new Vue({
         allTvMovies: [],
         search: false,
         posterSize: "w342",
-        nullPoster: "img_not_found.jpg"
+        nullPoster: "img_not_found.jpg",
+        genres: []
     },
     methods: {
         searchMovie() {
@@ -41,7 +42,7 @@ var app = new Vue({
                                     }
                                     element.cast = cast;    //aggiungo propriteà "cast" all'oggetto
                                     this.allTvMovies.push(element);
-                                })
+                                });
                             } if (element.media_type == "tv") {
                                 axios
                                 .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`,
@@ -60,7 +61,7 @@ var app = new Vue({
                                     }
                                     element.cast = cast;
                                     this.allTvMovies.push(element);
-                                })
+                                });
                             }
                         });
                         this.search = true;
@@ -113,12 +114,6 @@ var app = new Vue({
             this.allTvMovies = [];
             this.search = false;
         },
-        ifOverview(item) {
-            if(item.overview != "") {
-                return true;
-            }
-            return false;
-        },
         tipology(item) {
             if(this.isMovie(item)) {
                 return "Film";
@@ -141,6 +136,42 @@ var app = new Vue({
                 }
             }
             return firstFive.join(", ");
+        },
+        foundGenre(item) {
+            let genreArray = [];
+            for(let i = 0; i < item.genre_ids.length; i++) {
+                this.genres.forEach(element => {
+                    if(element.id == item.genre_ids[i]) {
+                        if(!genreArray.includes(element.name)){
+                            genreArray.push(element.name);
+                        }
+                    }
+                });
+            }
+            return genreArray.join(", ");
         }
+    },
+    mounted() {
+        axios
+            .get("https://api.themoviedb.org/3/genre/movie/list",
+            { params: {
+                api_key: this.apiKey,
+                language: this.language
+                }
+            })
+            .then(response => {
+                this.genres = this.genres.concat(response.data.genres);
+            });
+        axios
+            .get("https://api.themoviedb.org/3/genre/tv/list",
+            {
+                params: {
+                    api_key: this.apiKey,
+                    language: this.language
+                }
+            })
+            .then(response => {
+                this.genres = this.genres.concat(response.data.genres);
+            });
     }
 });

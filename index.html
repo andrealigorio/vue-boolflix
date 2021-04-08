@@ -40,19 +40,22 @@
                     <div class="tipology">
                         <span>Tipologia:</span>{{tipology(movie)}}
                     </div>
+                    <div class="genre" v-if="movie.genre_ids.length > 0">
+                        <span>Genere:</span>{{foundGenre(movie)}}
+                    </div>
                     <div class="cast" v-if="movie.cast.length > 0">
                         <span>Cast:</span>{{printCast(movie.cast)}}
                     </div>
                     <div class="language">
                         <span>Lingua originale:</span><img :src="printFlag(movie)" :alt="movie.original_language" @error="noFlag">
                     </div>
-                    <div class="vote">
+                    <div class="vote" v-if="movie.vote_average > 0">
                         <span>Valutazione:</span>
                         <i v-for="star in printStars(movie.vote_average)" class="fas fa-star"></i>
                         <i v-for="star in (5 - printStars(movie.vote_average))"class="far fa-star"></i>
                     </div>
-                    <div class="overview" v-if="ifOverview(movie)">
-                        <span>Panoramica:</span>{{movie.overview}}
+                    <div class="overview" v-if="movie.overview != ''">
+                        <span>Trama:</span>{{movie.overview}}
                     </div>
                 </div>
             </div>
