@@ -166,7 +166,9 @@ var app = new Vue({
             var cont = 0;
             if(this.genreSelected != "All") {
                 array.forEach(element => {
-                    if(!element.genre.includes(this.genreSelected)) {
+                    if(element.genre == undefined) {
+                        cont++
+                    } else if (!element.genre.includes(this.genreSelected)) {
                         cont++;
                     }
                 });
