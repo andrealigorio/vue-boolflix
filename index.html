@@ -66,10 +66,10 @@
                     </div>
                 </div>
             </div>
-            <div class="nothing_found" v-if="(allTvMovies.length == 0 && search)">
+            <div class="nothing_found" v-if="(allTvMovies.length == 0 && search) || noGenreFound(allTvMovies)">
                 Nessun elemento trovato
             </div>
-            <div class="logo_big" v-if="allTvMovies.length == 0">
+            <div class="logo_big" v-if="(allTvMovies.length == 0) || noGenreFound(allTvMovies)">
                 <img src="img/boolflixBig.png" alt="Logo Boolflix">
             </div>
         </div>

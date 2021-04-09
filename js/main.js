@@ -161,6 +161,23 @@ var app = new Vue({
                 }
                 return false;
             }
+        },
+        noGenreFound(array) {
+            var cont = 0;
+            if(this.genreSelected != "All") {
+                array.forEach(element => {
+                    if(!element.genre.includes(this.genreSelected)) {
+                        cont++;
+                    }
+                });
+                if(cont == array.length) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
     },
     mounted() {
